@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In</title>
+</head>
+<body>
+    <h1>Esto no es un front end, debes usar postman para interactuar y ver los resultados en la BD de mongo no obstante...</h1>
+    <a target="_blank" href="https://node-05-restserver-production.up.railway.app/api/users?desde=0&limite=15">Link de la web get users</a>
+    <div id="g_id_onload"
+         data-client_id="528500222886-5tohrsl12t3gj1ce196e9nog1aq7is7r.apps.googleusercontent.com"  
+         data-login_uri="https://node-05-restserver-production.up.railway.app"
+         data-auto_prompt="false"
+         data-callback="handleCredentialResponse">
+      </div>
+      <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+      </div>
+      <button id="g_id_signout">Sign Out</button>
+
+
+      <hr>
+      <h1>One Tap</h1>
+     
+      <script>
+        function handleCredentialResponse(response) {   
+              
+
+           const token = { id_token: response.credential } 
+
+           fetch('https://node-05-restserver-production.up.railway.app/api/auth/google', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(token)
+
+           })
+            .then( resp => resp.json())
+            .then( resp => {
+                console.log('respuesta...',resp);
+                
+                localStorage.setItem('email', resp.user.email);
+                
+            })
+            .catch( console.warn );
+      
+          
+        }
+        const button = document.getElementById('g_id_signout');
+        button.onclick = async() => {
+
+            
+            google.accounts.id.disableAutoSelect()
+            google.accounts.id.revoke(localStorage.getItem('email'), done => {
+                console.log('consent revoked');
+                localStorage.clear()
+                location.reload()
+            });
+        }
+      </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+</body>
+</html>
