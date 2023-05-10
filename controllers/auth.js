@@ -40,7 +40,7 @@ const login = async(req = request, res= response) => {
 
         // TODO generar el JWT
         const token = await generarJWT(user.id);
-        console.log('fgfhghfgh:    ',token);
+        // console.log('mi token:    ',token);
 
         // TODO enviar el token
         res.json({
@@ -60,7 +60,7 @@ const login = async(req = request, res= response) => {
 const googleSignin = async(req, res= response) => {
 
     const { id_token } = req.body;
-    console.log('mi token                          ',id_token)
+    // console.log('mi token                          ',id_token)
     
     try {
         // const googleUser = await googleVerify(id_token);
@@ -117,9 +117,20 @@ const googleSignin = async(req, res= response) => {
 }
 
 
+const renovarToken = async(req, res= response) => {
+    const { user } = req;
+        
+    const token = await generarJWT(user.id);
+    res.json({
+        user,
+        token
+    })
+}
+
 
 module.exports = {
     login,
-    googleSignin
+    googleSignin,
+    renovarToken
 
 }

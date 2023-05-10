@@ -20,7 +20,7 @@ const validarJWT = async(req = request, res = response, next) => {
     }
 
     try {
-         console.log(token);
+         // console.log(token);
 
         // const payload = jwt.verify(token, process.env.SECRET_JWT_SEED);
 
